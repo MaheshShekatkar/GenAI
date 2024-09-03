@@ -1,0 +1,87 @@
+﻿using System;
+using System.Text;
+using System.Linq;
+
+namespace FindUniqueNamesWithVowels
+{
+  class Program
+  {
+    static void Main(string[] args)
+    {
+      //TODO 1: Implement GetUniqueWords function, such that the returned array has no duplicates and has only words starting with a vowel
+      //TODO 2: Also implement the Nnuit test for the class FindUniqueNamesWithVowels
+
+      string[] names1 = new string[] { "Amazon", "Elephant", "Uber", "good" };
+      string[] names2 = new string[] { "English", "France", "Elephant" };
+      var findUniqueNamesWithVowels = new FindUniqueNamesWithVowels();
+      var UniqueNames = findUniqueNamesWithVowels.GetUniqueWords(names1, names2); // should print Amazon, Elephant, Uber, English
+      findUniqueNamesWithVowels.Print(UniqueNames);
+      Console.ReadKey();
+    }
+  }
+
+  /// <summary>
+  /// Type contains method to get the unique words starting from vowel. 
+  /// </summary>
+  public class FindUniqueNamesWithVowels
+  {
+    /// <summary>
+    /// Get the unique words starting from vowel.
+    /// </summary>
+    /// <param name="names1">first word collection</param>
+    /// <param name="names2">second word collection</param>
+    /// <returns>unique words starting from vowel</returns>
+    public StringBuilder GetUniqueWords(string[] names1, string[] names2)
+    {
+      var names = Merge(names1, names2);
+      StringBuilder UniqueNames = new StringBuilder();
+
+      foreach (var name in names)
+      {
+        if (UniqueNames.ToString().Contains(name))
+          continue;
+
+        if (!IsWordFirstCharVowel(name.ToUpper()[0]))
+          continue;
+
+        UniqueNames.AppendFormat("{0}{1}", name, ",");
+      }
+
+      return UniqueNames.Length > 0 ? UniqueNames.Remove(UniqueNames.Length - 1, 1) : UniqueNames;
+    }
+
+    /// <summary>
+    /// Get the merged colllection of input.
+    /// </summary>
+    /// <param name="names1">first word collection</param>
+    /// <param name="names2">second word collection</param>
+    /// <returns>Merged colllection</returns>
+    internal string[] Merge(string[] names1, string[] names2)
+    {
+      var names = new string[names1.Length + names2.Length];
+      names1.CopyTo(names, 0);
+      names2.CopyTo(names, names1.Length);
+      return names;
+    }
+
+    /// <summary>
+    /// Identify whether the passed character is vowel or not.
+    /// </summary>
+    /// <param name="fChar">First character of the word</param>
+    /// <returns>True/False</returns>
+    internal bool IsWordFirstCharVowel(char fChar)
+    {
+      var vowel = new char[] { 'A', 'E', 'I', 'O', 'U' };
+      return vowel.Any(x => x.Equals(fChar));
+    }
+
+    /// <summary>
+    /// Print the unique words on console.
+    /// </summary>
+    /// <param name="uniqueNames">Unique words</param>
+    public void Print(StringBuilder uniqueNames)
+    {
+      Console.WriteLine(uniqueNames);
+    }
+  }
+}
